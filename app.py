@@ -1,9 +1,11 @@
 from tkinter import *
+from mydb import Database
 
 
 class NLPApp:
     def __init__(self):
         self.root = Tk()
+        self.dbo = Database()
         self.root.title("NLPApp")
         try:
             self.root.iconbitmap('resources/favicon.ico')
@@ -15,7 +17,8 @@ class NLPApp:
         self.root.mainloop()
 
     def loginGUI(self):
-        self.clear_gui()
+        if self.root.pack_slaves():
+            self.clear_gui()
         heading = Label(self.root,text='NLPApp',bg="#FFFFFF",fg='black')
         heading.pack(pady=(30,30))
         heading.configure(font=('verdana',24,'bold'))
@@ -38,7 +41,7 @@ class NLPApp:
         label3 = Label(self.root,text='Not registered?',width=30,bg="#FFFFFF",fg='black')
         label3.pack(pady=(10,5))
 
-        redirect_btn = Button(self.root,text='register',command=self.register_gui)
+        redirect_btn = Button(self.root,text='Register',command=self.register_gui)
         redirect_btn.pack()
 
     def register_gui(self):
@@ -65,7 +68,7 @@ class NLPApp:
         self.password_input = Entry(self.root,width=50,show='*',bg="#FFFFFF",fg='black')
         self.password_input.pack(pady=(5,10),ipady=4)
 
-        register_btn = Button(self.root,text='Register',width=30,height=2,command=self.register)
+        register_btn = Button(self.root,text='Register',width=30,height=2,command=self.registering)
         register_btn.pack(pady=(5,5))
 
         label3 = Label(self.root,text='Already register?',width=30,bg="#FFFFFF",fg='black')
@@ -85,11 +88,12 @@ class NLPApp:
         print(f"Login attempt with email: {email}")
 
     def registering(self):
-        # fetch the from the exiting GUI
+        # fetch data from the exiting GUI
         name = self.name_input.get()
         email = self.email_input.get()
         password = self.password_input.get()
         # Add register logic here
+        self.dbo.add_data(name,email,password)
         print(f"Register attempt with name: {name}, email: {email}")
 
 nlp = NLPApp()
