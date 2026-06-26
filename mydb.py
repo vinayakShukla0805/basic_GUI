@@ -16,3 +16,12 @@ class Database:
                 json.dump(database, wf)
             print("Registration Successfully")
             return 1
+        
+    def search_user(self,email,password):
+        with open("db.json",'r') as rf:
+            database = json.load(rf)
+            if email in database:
+                if database[email][1] == password:
+                    return 1
+                else:
+                    return 0

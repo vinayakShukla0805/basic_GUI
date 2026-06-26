@@ -1,6 +1,6 @@
 from tkinter import *
 from mydb import Database
-
+from tkinter import messagebox
 
 class NLPApp:
     def __init__(self):
@@ -35,7 +35,7 @@ class NLPApp:
         self.password_input = Entry(self.root,width=50,show='*',bg="#FFFFFF",fg='black')
         self.password_input.pack(pady=(5,10),ipady=4)
 
-        login_btn = Button(self.root,text='Login',width=30,height=2,command=self.login)
+        login_btn = Button(self.root,text='Login',width=30,height=2,command=self.user_login)
         login_btn.pack(pady=(5,5))
 
         label3 = Label(self.root,text='Not registered?',width=30,bg="#FFFFFF",fg='black')
@@ -81,10 +81,15 @@ class NLPApp:
         for i in self.root.pack_slaves():
             i.destroy()
 
-    def login(self):
+    def user_login(self):
         email = self.email_input.get()
         password = self.password_input.get()
         # Add login logic here
+        response = self.dbo.search_user(email,password)
+        if(response):
+            messagebox.showinfo("Success","Login Successfully")
+        else:
+            messagebox.showinfo("Error","Login failed")
         print(f"Login attempt with email: {email}")
 
     def registering(self):
@@ -93,7 +98,12 @@ class NLPApp:
         email = self.email_input.get()
         password = self.password_input.get()
         # Add register logic here
-        self.dbo.add_data(name,email,password)
+        response = self.dbo.add_data(name,email,password)
         print(f"Register attempt with name: {name}, email: {email}")
+
+        if(response):
+            messagebox.showinfo("Success","Registration Successfully.You can login Now")
+        else:
+            messagebox.showinfo("Error" ,"Email exists")
 
 nlp = NLPApp()
